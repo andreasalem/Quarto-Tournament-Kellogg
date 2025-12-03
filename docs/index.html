@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Tournament Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+    
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    .app-frame {
+      width: 100%;
+      height: calc(100vh - 180px);
+      min-height: 600px;
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 600px;
+      background: #fff;
+      border-radius: 12px;
+      color: #333;
+    }
+    
+    .loading-text {
+      font-size: 1.2rem;
+      color: #666;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    
+    footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .direct-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    
+    .direct-link:hover {
+      background: #2563eb;
+      text-decoration: none;
+    }
+
+    /* Placeholder when app URL not configured */
+    .setup-instructions {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 12px;
+      color: #333;
+    }
+    
+    .setup-instructions h2 {
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+    
+    .setup-instructions ol {
+      margin-left: 1.5rem;
+      line-height: 1.8;
+    }
+    
+    .setup-instructions code {
+      background: #f1f5f9;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>♟️ Chess Tournament Tracker</h1>
+    <p class="subtitle">Record matches, track standings, crown champions</p>
+  </header>
+  
+  <main class="app-container">
+    <!-- 
+      INSTRUCTIONS: Replace YOUR_SHINYAPPS_URL below with your actual shinyapps.io URL
+      Example: https://yourusername.shinyapps.io/chess-tournament-shiny/
+    -->
+    
+    <div id="app-wrapper">
+      <!-- The iframe will be inserted here by JavaScript -->
+    </div>
+  </main>
+  
+  <footer>
+    <p>
+      Powered by <a href="https://shiny.posit.co/" target="_blank">R Shiny</a> |
+      <a href="https://github.com/YOUR_USERNAME/chess-tournament" target="_blank">View on GitHub</a>
+    </p>
+    <a href="" id="direct-link" class="direct-link" style="display:none;">
+      Open app in new tab ↗
+    </a>
+  </footer>
+
+  <script>
+    // ============================================================
+    // CONFIGURE YOUR SHINYAPPS.IO URL HERE
+    // ============================================================
+    const SHINY_APP_URL = ""; // e.g., "https://yourusername.shinyapps.io/chess-tournament-shiny/"
+    // ============================================================
+    
+    const wrapper = document.getElementById('app-wrapper');
+    const directLink = document.getElementById('direct-link');
+    
+    if (SHINY_APP_URL && SHINY_APP_URL.length > 0) {
+      // App URL is configured - show iframe
+      wrapper.innerHTML = `
+        <iframe 
+          src="${SHINY_APP_URL}" 
+          class="app-frame" 
+          title="Chess Tournament Tracker"
+          loading="lazy">
+        </iframe>
+      `;
+      directLink.href = SHINY_APP_URL;
+      directLink.style.display = 'inline-block';
+    } else {
+      // App URL not configured - show setup instructions
+      wrapper.innerHTML = `
+        <div class="setup-instructions">
+          <h2>🚀 Setup Required</h2>
+          <p>To complete your deployment:</p>
+          <ol>
+            <li>Deploy your Shiny app to <a href="https://www.shinyapps.io/" target="_blank">shinyapps.io</a></li>
+            <li>Copy your app URL (e.g., <code>https://yourusername.shinyapps.io/chess-tournament-shiny/</code>)</li>
+            <li>Edit <code>docs/index.html</code> and update the <code>SHINY_APP_URL</code> variable</li>
+            <li>Commit and push to GitHub</li>
+          </ol>
+          <br>
+          <p><strong>Or run locally:</strong></p>
+          <ol>
+            <li>Open the project in RStudio</li>
+            <li>Run <code>shiny::runApp("app")</code></li>
+          </ol>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
