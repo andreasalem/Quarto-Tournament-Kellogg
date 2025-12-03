@@ -1,4 +1,4 @@
-# Chess Tournament Tracker - R Shiny App
+# Quarto Tournament Tracker - R Shiny App
 
 library(shiny)
 library(DBI)
@@ -149,7 +149,7 @@ init_db()
 # ------------------------------------------------------------------------------
 
 ui <- page_navbar(
-  title = "♟️ Chess Tournament Tracker",
+  title = "♟️ Quarto Tournament Tracker",
   theme = bs_theme(
     bootswatch = "flatly",
     primary = "#2c3e50"
