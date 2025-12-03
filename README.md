@@ -1,127 +1,147 @@
-# ♟️ Chess Tournament Tracker (R Shiny)
+# ♟️ Chess Tournament Tracker
 
-A Shiny web app for tracking chess tournament results with persistent SQLite storage.
+A web app for tracking chess tournament results, with a GitHub Pages landing page and R Shiny backend.
 
-## Features
+## Architecture
 
-- **Record Matches**: Log games with date, players, result, and notes
-- **Live Standings**: Auto-calculated rankings by wins and win rate
-- **Match History**: View, export, and delete past matches
-- **Persistent Storage**: SQLite database persists across sessions
-- **Player Autocomplete**: Previous players appear as suggestions
-- **Export to CSV**: Download your data anytime
-
-## Local Setup
-
-### Prerequisites
-
-- R (≥ 4.0)
-- Required packages:
-
-```r
-install.packages(c("shiny", "DBI", "RSQLite", "DT", "bslib"))
+```
+GitHub Pages (static site)     shinyapps.io (Shiny app)
+        │                              │
+        │      ┌──────────────┐        │
+        └─────►│   Website    │◄───────┘
+               │  (iframe)    │
+               └──────────────┘
 ```
 
-### Run Locally
+- **GitHub Pages**: Hosts the landing page (`docs/index.html`)
+- **shinyapps.io**: Runs the actual Shiny app
+- The website embeds the Shiny app via iframe
+
+## Quick Start
+
+### Step 1: Deploy Shiny App to shinyapps.io
 
 ```r
-shiny::runApp()
-```
+# Install packages
+install.packages(c("shiny", "DBI", "RSQLite", "DT", "bslib", "rsconnect"))
 
-Or in RStudio, open `app.R` and click "Run App".
-
----
-
-## Deploy to shinyapps.io
-
-### Step 1: Create Account
-
-1. Go to [shinyapps.io](https://www.shinyapps.io/)
-2. Sign up for a free account (25 active hours/month)
-
-### Step 2: Install rsconnect
-
-```r
-install.packages("rsconnect")
-```
-
-### Step 3: Configure Your Account
-
-1. In shinyapps.io, go to **Account → Tokens**
-2. Click **Show Token** and copy the command
-3. Run it in R:
-
-```r
+# Set up shinyapps.io account (get credentials from shinyapps.io dashboard)
 rsconnect::setAccountInfo(
-  name = 'YOUR_ACCOUNT_NAME',
+  name = 'YOUR_USERNAME',
   token = 'YOUR_TOKEN',
   secret = 'YOUR_SECRET'
 )
-```
-### Step 4: Deploy
 
-```r
-# Navigate to your app directory
-setwd("/path/to/chess-tournament-shiny")
-
-# Deploy
-rsconnect::deployApp()
+# Deploy the app
+rsconnect::deployApp("app")
 ```
 
-Your app will be live at: `https://YOUR_ACCOUNT.shinyapps.io/chess-tournament-shiny/`
+Note your app URL: `https://YOUR_USERNAME.shinyapps.io/app/`
 
----
+### Step 2: Update the Website
 
-## Deploy to GitHub + Host Elsewhere
+Edit `docs/index.html` and set your Shiny app URL (around line 95):
 
-If you want version control:
+```javascript
+const SHINY_APP_URL = "https://YOUR_USERNAME.shinyapps.io/app/";
+```
+
+### Step 3: Push to GitHub
 
 ```bash
-cd chess-tournament-shiny
 git init
 git add .
 git commit -m "Chess tournament tracker"
-git remote add origin https://github.com/YOUR-USERNAME/chess-tournament-shiny.git
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/chess-tournament.git
 git push -u origin main
 ```
 
-### Alternative Hosting Options
+### Step 4: Enable GitHub Pages
 
-| Platform | Free Tier | Notes |
-|----------|-----------|-------|
-| [shinyapps.io](https://shinyapps.io) | 25 hrs/month | Easiest |
-| [Posit Connect Cloud](https://connect.posit.cloud/) | 5 apps | New option |
-| Self-hosted (Shiny Server) | Unlimited | Requires server |
+1. Go to your repo on GitHub
+2. **Settings** → **Pages**
+3. Source: **Deploy from a branch**
+4. Branch: `main`, Folder: `/docs`
+5. Click **Save**
+
+Your site will be live at: `https://YOUR_USERNAME.github.io/chess-tournament/`
 
 ---
 
-## File Structure
+## Project Structure
 
 ```
-chess-tournament-shiny/
-├── app.R                    # Main Shiny application
-├── chess_tournament.sqlite  # SQLite database (created on first run)
+chess-tournament/
+├── app/
+│   └── app.R              # Shiny application (deploy to shinyapps.io)
+├── docs/
+│   └── index.html         # GitHub Pages website (embeds Shiny app)
+├── .gitignore
 └── README.md
 ```
 
-## Data Persistence Notes
+## Features
 
-- **Local**: SQLite file persists in the app directory
-- **shinyapps.io**: Data persists BUT may be wiped on redeployment or after periods of inactivity
-- **For production use**: Consider connecting to an external database (PostgreSQL, Google Sheets, etc.)
+- **Record Matches**: Date, players, result, notes
+- **Live Standings**: Auto-calculated rankings
+- **Match History**: Full history with CSV export
+- **Persistent Storage**: SQLite database
+- **Player Autocomplete**: Remembers previous players
 
-### Optional: Use Google Sheets for Reliable Persistence
+## Local Development
 
-If you need data to persist reliably on shinyapps.io, you can modify the app to use `googlesheets4`. Let me know if you'd like that version!
+### Run Shiny app locally:
+
+```r
+shiny::runApp("app")
+```
+
+### Preview website locally:
+
+Just open `docs/index.html` in a browser (the iframe won't work until you configure the URL).
 
 ---
 
-## Customization
+## Updating the App
 
-- **Theme**: Change `bootswatch = "flatly"` in the `bs_theme()` call to any [Bootswatch theme](https://bootswatch.com/)
-- **Add Players**: Players are automatically added when you record their first match
-- **Scoring**: Win rate includes draws as 0.5 wins (standard chess scoring)
+After making changes to `app/app.R`:
+
+```r
+rsconnect::deployApp("app")
+```
+
+After making changes to `docs/`:
+
+```bash
+git add docs/
+git commit -m "Update website"
+git push
+```
+
+---
+
+## Troubleshooting
+
+### Shiny app not loading in iframe?
+
+Some browsers block cross-origin iframes. The "Open in new tab" link provides a fallback.
+
+### Data disappeared on shinyapps.io?
+
+Free tier can wipe data on inactivity/redeployment. For reliable persistence, consider:
+- Upgrading to paid tier
+- Using Google Sheets as backend (let me know if you want this)
+- Using an external database
+
+### GitHub Pages not updating?
+
+- Check that you selected `/docs` folder in Pages settings
+- Wait a few minutes for propagation
+- Check the Actions tab for deployment status
+
+---
 
 ## License
 
-MIT - Use freely!
+MIT
